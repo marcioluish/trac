@@ -1,3 +1,4 @@
 .git
 .gitattributes
 docker-compose.yaml
+env

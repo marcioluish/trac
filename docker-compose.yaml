@@ -1,9 +1,9 @@
 version: "3.8"
 
 services:
-  trac:
-    container_name: trac
-    image: trac
+  trac_backend:
+    container_name: trac_backend
+    image: trac_backend
     build:
       context: ./app
       dockerfile: Dockerfile
@@ -14,11 +14,31 @@ services:
       - ./app:/app
       # anonymous volume
       - /app/node_modules
+    env_file:
+      - ./env/backend.env
+    depends_on:
+      - trac_db
     # TODO discard port 9229 used for debugging
     ports:
-      - 3000:3000
+      - 8000:8000
       - 9229:9229
+    networks:
+      - trac
+  
+  trac_db:
+    container_name: trac_db
+    image: "mongo:5.0.0"
+    volumes:
+      - data:/data/db
+    env_file:
+      - ./env/mongo.env
+    networks:
+      - trac
   
 
 volumes:
   logs:
+  data:
+
+networks:
+  trac:
