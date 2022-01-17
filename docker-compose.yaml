@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  trac:
+    container_name: trac
+    image: trac
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    volumes:
+      # named volume
+      - logs:/app/logs
+      # bind volume
+      - ./app:/app
+      # anonymous volume
+      - /app/node_modules
+    # TODO discard port 9229 used for debugging
+    ports:
+      - 3000:3000
+      - 9229:9229
+  
+
+volumes:
+  logs:
