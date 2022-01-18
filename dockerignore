@@ -2,3 +2,4 @@
 .gitattributes
 docker-compose.yaml
 env
+.prettierrc

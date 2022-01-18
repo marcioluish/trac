@@ -8,6 +8,8 @@ const morgan = require('morgan');
 
 const app = express();
 
+const companyRoutes = require('./routes/company');
+
 const accessLogStream = fs.createWriteStream(
   path.join(__dirname, 'logs', 'access.log'),
   { flags: 'a' }
@@ -15,7 +17,10 @@ const accessLogStream = fs.createWriteStream(
 
 app.use(morgan('combined', { stream: accessLogStream }));
 
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+app.use(companyRoutes);
 
 mongoose.connect(
   `mongodb://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@trac_db:27017?authSource=admin`,
