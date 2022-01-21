@@ -15,7 +15,6 @@ const assetSchema = new Schema({
   },
   description: {
     type: String,
-    unique: true,
   },
   model: {
     type: String,
@@ -28,12 +27,6 @@ const assetSchema = new Schema({
   unitId: {
     type: String,
     required: true,
-  },
-  status: {
-    type: String,
-  },
-  health_level: {
-    type: Number,
   },
 });
 
