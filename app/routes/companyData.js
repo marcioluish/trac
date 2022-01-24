@@ -3,12 +3,19 @@ const router = express.Router();
 
 const Unit = require('../models/unit');
 const Asset = require('../models/asset');
+const { raw } = require('body-parser');
 
-router.get('/company-data', async (req, res, next) => {
+router.post('/company-data', async (req, res, next) => {
   console.log('TRYING TO FETCH COMPANY DATA');
   const companyId = req.body.companyId;
   let rawCompanyData = [];
   let assetData = [];
+
+  // Check for empty username field
+  if (!companyId || companyId.trim().length === 0) {
+    console.log('Invalid INPUT - companyId');
+    return res.status(400).json({ message: 'Invalid company Id.' });
+  }
 
   try {
     const units = await Unit.find({ companyId: companyId });
@@ -30,7 +37,6 @@ router.get('/company-data', async (req, res, next) => {
           assetOwner: asset.owner,
         });
       }
-      console.log(JSON.stringify(assetData));
       rawCompanyData.push({
         unit_id: unit.id,
         unit_city: unit.unit_city,

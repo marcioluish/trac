@@ -1,5 +1,5 @@
 const express = require('express');
-const { Kafka, logLevel } = require('kafkajs');
+const { Kafka } = require('kafkajs');
 const router = express.Router();
 const Unit = require('../models/unit');
 const Asset = require('../models/asset');
@@ -10,8 +10,7 @@ router.post('/health', async (req, res, next) => {
   let unitsList = [];
 
   const kafka = new Kafka({
-    logLevel: logLevel.DEBUG,
-    clientId: 'trac-backend',
+    clientId: 'trac-health',
     brokers: ['broker:29092'],
   });
   const producer = kafka.producer();
@@ -43,14 +42,13 @@ router.post('/health', async (req, res, next) => {
   } catch (err) {
     console.error('ERROR CONNECTING TO KAFKA');
     console.error(err.message);
-    res
-      .status(500)
-      .json({ message: 'Failed to connect to as a kafka producer.' });
+    res.status(500).json({ message: 'Failed to connect as a kafka producer.' });
   }
 
   let i = 0;
   const random = setInterval(async () => {
     const msg = JSON.stringify({
+      key: 'health_level',
       assetId: assetsList[Math.floor(Math.random() * assetsList.length)],
       value: Math.floor(Math.random() * 101),
     });
@@ -66,7 +64,7 @@ router.post('/health', async (req, res, next) => {
       });
 
       i++;
-      if (i == 10) {
+      if (i == 4) {
         await producer.disconnect();
         clearInterval(random);
         res.status(200).json({
@@ -81,7 +79,7 @@ router.post('/health', async (req, res, next) => {
         message: `Failed sending messages to topic status. ERROR: ${err.message}`,
       });
     }
-  }, 200);
+  }, 1000);
 });
 
 module.exports = router;
