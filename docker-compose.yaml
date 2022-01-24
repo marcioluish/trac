@@ -24,7 +24,30 @@ services:
       - 9229:9229
     networks:
       - trac
-  
+
+  trac_frontend:
+    container_name: trac_frontend
+    image: trac_frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      # bind mount
+      - ./frontend:/app
+      # named mount log
+      - logs_frontend:/app/logs
+      # anonymous mount
+      - /frontend/node_modules
+    env_file:
+      - ./env/frontend.env
+    depends_on:
+      - trac_backend
+    ports:
+      - 3000:3000
+      # - 9229:9229
+    networks:
+      - trac
+
   trac_db:
     container_name: trac_db
     image: "mongo:5.0.0"
@@ -155,6 +178,7 @@ services:
 volumes:
   logs:
   data:
+  logs_frontend:
 
 networks:
   trac:
