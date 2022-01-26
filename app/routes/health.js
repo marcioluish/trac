@@ -64,7 +64,7 @@ router.post('/health', async (req, res, next) => {
       });
 
       i++;
-      if (i == 4) {
+      if (i == 8) {
         await producer.disconnect();
         clearInterval(random);
         res.status(200).json({
@@ -79,7 +79,7 @@ router.post('/health', async (req, res, next) => {
         message: `Failed sending messages to topic status. ERROR: ${err.message}`,
       });
     }
-  }, 1000);
+  }, 200);
 });
 
 module.exports = router;
