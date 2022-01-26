@@ -1,6 +1,6 @@
 # Web app to track status and health of a company's assets
 
-### ATTENTION: Frontend is not FINISHED! By Jan/24th it has only one page, which has problems with websocket/kafka messages. The plan was to have charts with health and status informations, as well as pages for creating each object listed below within a menu.
+### ATTENTION: Frontend is not FINISHED! On Jan-26th problems with dom rendering on socketio messages arrivals were fixed. Now you can see each 'health level' and 'status' updating on 'real-time' new socketio messages. Next activities: add buttons to mock producing values to kafka into the UI, create frontend pages to add new objects, login and logout. Also, add a menu to access these functionalities.
 ### ATTENTION: For the first page to load all units and assets, substitute hardcoded companyId in the file _./frontend/src/App.js:line_18_ with your created company ID.
 
 # **Backend**
@@ -141,7 +141,7 @@ It builds up just one page:
 
 Which has a selector to show all assets registered into a unit.
 
-**IMPORTANT!!!!! In this page, the websocket connects to the backend and should present values produced by kafka in the _HEALTH_ and _STATUS_ boxes. I haven't finished this functionality due to some problems on dom rendering.**
+**IMPORTANT!!!!! In this page, the websocket connects to the backend and should present values produced by kafka in the _HEALTH_ and _STATUS_ boxes. To produce its values it is necessary to hit backend routes http://localhost:8000/status and http://localhost:8000/health.**
 
 # **MongoDB**
 DB that register:
