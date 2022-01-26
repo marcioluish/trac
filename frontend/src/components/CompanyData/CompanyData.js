@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { SocketContext } from '../../socket';
+import React, { useState } from 'react';
 
 import Card from '../UI/Card';
 import CompanyUnitFilter from './CompanyUnitFilter';
@@ -7,34 +6,22 @@ import AssetsList from './AssetsList';
 import './CompanyData.css';
 
 const CompanyData = (props) => {
-  const [unit, setUnit] = useState('');
-  const [filteredAssets, setFilteredAssets] = useState('');
-  const socket = useContext(SocketContext);
+  const [unit, setUnit] = useState(null);
 
   const filterByUnit = (index) => {
     setUnit(props.companyData[index]);
-    setFilteredAssets(
-      JSON.parse(props.companyData[index].assets).map((e) => {
-        e.status = '';
-        e.health_level = '';
-        return e;
-      })
-    );
   };
 
-  useEffect(() => {
-    // MOCK Activating kafka consumer
-    fetch('http://localhost:3000/kafka', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+  console.log('COMPANY DATA');
 
-    socket.on('assets-data', function (data) {
-      // setSocketData(data.assetData);
+  let filteredAssets;
+  if (unit) {
+    filteredAssets = JSON.parse(unit.assets).map((e) => {
+      e.status = '';
+      e.health_level = '';
+      return e;
     });
-  }, []);
+  }
 
   return (
     <div>
